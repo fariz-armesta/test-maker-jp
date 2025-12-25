@@ -11,6 +11,13 @@ class PDFCreator(FPDF):
             r"NotoSansJP-VariableFont_wght.ttf",
             uni=True
         )
+        
+        self.add_font(
+            "NotoSansJP",
+            "B",
+            r"noto-sans-jp-bold.ttf",
+            uni=True
+        )
     
     def create_pdf(self, source_file:str):
         self.source_file = source_file
@@ -20,21 +27,29 @@ class PDFCreator(FPDF):
         
         self.add_page()
         self.set_font("NotoSansJP", "", 12)
+        question_counter = 1
         
         for i in range(len(df_data)):
             row = df_data.iloc[i]
             if row["type"] == "案内":
+                if question_counter != 1:
+                    self.ln(10)
+                self.set_font("NotoSansJP", "B", 12)
                 self.cell(0, 10, f"{row['Text']}", new_x="LMARGIN", new_y="NEXT")
             if row["type"] == "漢字":
-                self.cell(0, 10, f"{i+1} {row['Text']} ", new_x="LMARGIN", new_y="NEXT")
+                self.set_font("NotoSansJP", "", 12)
+                self.cell(0, 10, f"{question_counter} {row['Text']} ", new_x="LMARGIN", new_y="NEXT")
                 usable_width = self.w - self.l_margin - self.r_margin
                 cell_width = usable_width / 4
                 cell_height = 10
                 
-                self.cell(cell_width, cell_height, f"A. {row['A']}", align="C")
-                self.cell(cell_width, cell_height, f"B. {row['B']}", align="C")
-                self.cell(cell_width, cell_height, f"C. {row['C']}", align="C")
-                self.cell(cell_width, cell_height, f"D. {row['D']}", new_x="LMARGIN", new_y="NEXT", align="C")
+                self.cell(cell_width, cell_height, f"A. {row['A']}", align="L")
+                self.cell(cell_width, cell_height, f"B. {row['B']}", align="L")
+                self.cell(cell_width, cell_height, f"C. {row['C']}", align="L")
+                self.cell(cell_width, cell_height, f"D. {row['D']}", new_x="LMARGIN", new_y="NEXT", align="L")
+                question_counter += 1
+                if i == len(df_data) -1:
+                    self.ln(15)
 
         self.output("C:\\Users\\Fariz Armesta\\Documents\\GitHub\\test-maker-jp\\test.pdf")
     
