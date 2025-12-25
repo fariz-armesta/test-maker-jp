@@ -1,4 +1,5 @@
 from fpdf import FPDF
+from get_data import GetData  
 
 class PDFCreator(FPDF):
     def __init__(self):
@@ -14,26 +15,27 @@ class PDFCreator(FPDF):
     def create_pdf(self, source_file:str):
         self.source_file = source_file
         
+        data = GetData(self.source_file)
+        df_data = data.give_data()
+        
         self.add_page()
-        self.set_font("Times", size=12)
-        question = ["When is her birthday?", 
-                    "What is her favorite color?", 
-                    "How old is she?"]
+        self.set_font("NotoSansJP", "", 12)
+        
+        for i in range(len(df_data)):
+            row = df_data.iloc[i]
+            if row["type"] == "案内":
+                self.cell(0, 10, f"{row['Text']}", new_x="LMARGIN", new_y="NEXT")
+            if row["type"] == "漢字":
+                self.cell(0, 10, f"{i+1} {row['Text']} ", new_x="LMARGIN", new_y="NEXT")
+                usable_width = self.w - self.l_margin - self.r_margin
+                cell_width = usable_width / 4
+                cell_height = 10
+                
+                self.cell(cell_width, cell_height, f"A. {row['A']}", align="C")
+                self.cell(cell_width, cell_height, f"B. {row['B']}", align="C")
+                self.cell(cell_width, cell_height, f"C. {row['C']}", align="C")
+                self.cell(cell_width, cell_height, f"D. {row['D']}", new_x="LMARGIN", new_y="NEXT", align="C")
 
-        option = [["January 1st", "February 2nd", "March 3rd", "April 4th"],
-                ["Red", "Blue", "Green", "Yellow"],
-                ["10", "11", "12", "13"]]
-
-        for i in range(len(question)):
-            self.cell(0, 10, f"{i+1} {question[i]} ", new_x="LMARGIN", new_y="NEXT")
-            usable_width = self.w - self.l_margin - self.r_margin
-            cell_width = usable_width / 4
-            cell_height = 10
-
-            self.cell(cell_width, cell_height, f"A. {option[i][0]}", align="C")
-            self.cell(cell_width, cell_height, f"B. {option[i][1]}", align="C")
-            self.cell(cell_width, cell_height, f"C. {option[i][2]}", align="C")
-            self.cell(cell_width, cell_height, f"D. {option[i][3]}", new_x="LMARGIN", new_y="NEXT", align="C")
         self.output("C:\\Users\\Fariz Armesta\\Documents\\GitHub\\test-maker-jp\\test.pdf")
     
     def header(self):
