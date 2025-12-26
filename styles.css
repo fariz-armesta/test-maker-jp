@@ -1,3 +1,14 @@
+#main_frame {
+    border: heavy double #00ffcc;
+    padding: 2 4;
+    width: 60;
+    height: auto;
+    background: #000000;
+}
+
+#outer_center {
+    padding-top: 1;   
+}
 
 Button {
     text-align: center;
