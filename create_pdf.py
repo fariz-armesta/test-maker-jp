@@ -1,6 +1,8 @@
 from fpdf import FPDF
 from get_data import GetData  
 
+import re
+
 class PDFCreator(FPDF):
     def __init__(self):
         super().__init__()
@@ -33,12 +35,27 @@ class PDFCreator(FPDF):
             row = df_data.iloc[i]
             if row["type"] == "案内":
                 if question_counter != 1:
-                    self.ln(10)
+                    self.ln(5)
                 self.set_font("NotoSansJP", "B", 12)
                 self.cell(0, 10, f"{row['Text']}", new_x="LMARGIN", new_y="NEXT")
+                self.ln(5)
             if row["type"] == "漢字":
                 self.set_font("NotoSansJP", "", 12)
-                self.cell(0, 10, f"{question_counter} {row['Text']} ", new_x="LMARGIN", new_y="NEXT")
+                text = row["Text"]
+                matches = re.findall(r"(.*?)\|(.*?)\|(.*)", text)
+                
+                if matches:
+                    self.cell(10, 10, f"{question_counter}.")
+
+                    self.write(10, matches[0][0])
+
+                    self.set_font("NotoSansJP", "B", 12)
+                    self.write(10, matches[0][1])
+
+                    self.set_font("NotoSansJP", "", 12)
+                    self.write(10, matches[0][2])
+                    self.ln(10)
+                    
                 usable_width = self.w - self.l_margin - self.r_margin
                 cell_width = usable_width / 4
                 cell_height = 10
@@ -50,6 +67,8 @@ class PDFCreator(FPDF):
                 question_counter += 1
                 if i == len(df_data) -1:
                     self.ln(15)
+                else:
+                    self.ln(5)
 
         self.output("C:\\Users\\Fariz Armesta\\Documents\\GitHub\\test-maker-jp\\test.pdf")
     
