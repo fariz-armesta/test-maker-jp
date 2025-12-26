@@ -69,6 +69,26 @@ class PDFCreator(FPDF):
                     self.ln(15)
                 else:
                     self.ln(5)
+            if row["type"] == "白":
+                self.set_font("NotoSansJP", "", 12)
+                self.cell(0, 10, f"{question_counter}. {row['Text']}", new_x="LMARGIN", new_y="NEXT")
+                
+                usable_width = self.w - self.l_margin - self.r_margin
+                cell_width = usable_width / 4
+                cell_height = 10
+                
+                self.cell(cell_width, cell_height, f"A. {row['A']}", align="L")
+                self.cell(cell_width, cell_height, f"B. {row['B']}", align="L")
+                self.cell(cell_width, cell_height, f"C. {row['C']}", align="L")
+                self.cell(cell_width, cell_height, f"D. {row['D']}", new_x="LMARGIN", new_y="NEXT", align="L")
+                if i == len(df_data) -1:
+                    self.ln(15)
+                else:
+                    self.ln(5)
+                
+                question_counter += 1
+                
+                
 
         self.output("C:\\Users\\Fariz Armesta\\Documents\\GitHub\\test-maker-jp\\test.pdf")
     
