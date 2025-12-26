@@ -2,11 +2,14 @@ from fpdf import FPDF
 from get_data import GetData  
 
 import re
+import os
 
 class PDFCreator(FPDF):
     def __init__(self):
         super().__init__()
         self.source_file = ""
+        self.output_dir = ""
+        
         self.add_font(
             "NotoSansJP",
             "",
@@ -21,8 +24,9 @@ class PDFCreator(FPDF):
             uni=True
         )
     
-    def create_pdf(self, source_file:str):
+    def create_pdf(self, source_file:str, output_dir:str):
         self.source_file = source_file
+        self.output_dir = output_dir
         
         data = GetData(self.source_file)
         df_data = data.give_data()
@@ -88,9 +92,9 @@ class PDFCreator(FPDF):
                 
                 question_counter += 1
                 
-                
-
-        self.output("C:\\Users\\Fariz Armesta\\Documents\\GitHub\\test-maker-jp\\test.pdf")
+        output_path = os.path.join(self.output_dir, "test.pdf")        
+        self.output(output_path)
+        #self.output("C:\\Users\\Fariz Armesta\\Documents\\GitHub\\test-maker-jp\\test.pdf")
     
     def header(self):
         self.image("ARMESTA2.png", x=10, y=8, w=26, h=26)

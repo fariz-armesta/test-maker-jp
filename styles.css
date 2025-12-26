@@ -1,0 +1,36 @@
+
+Button {
+    text-align: center;
+    background: #000000;
+    color: #00ffcc;
+    border: solid #00ffcc;
+    padding: 1 4;
+}
+
+Button:hover {
+    background: #00ffcc;
+    color: #000000;
+    border: double #00ffcc;
+}
+
+#open { width: 40; color: #ff00ff; border: solid #ff00ff; }
+#open:hover { background: #ff00ff; color: #000000; }
+
+#dir { width: 40; color: #ffff00; border: solid #ffff00; }
+#dir:hover { background: #ffff00; color: #000000; }
+
+#create_pdf { width: 40; color: #00ff00; border: solid #00ff00; }
+#create_pdf:hover { background: #00ff00; color: #000000; }
+
+Label {
+    width: 40;
+    text-align: center;
+    color: #00ffff;
+    background: #000000;
+    padding: 0 1;
+}
+
+#title {
+    color: #ff00ff;
+    padding: 1 0;
+}
